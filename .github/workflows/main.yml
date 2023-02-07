@@ -1,26 +1,29 @@
-name: CI/CD Pipeline Workshop
-
-on:
+name: Production CI
+on:  #Defines hooks on this pipeline
   push:
-    branches: ["main"]
-
-workflow_dispatch:
-
+    branches: ["main"] #Hook triggered when these branches are pushed
+  workflow_dispatch:
+    #Defines the machine that this will run on
 jobs:
   build:
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: .
+  #GitHub actions has predefined steps/ Templates
+    steps:
+      - uses: actions/checkout@v3 #Checkout checks out latest commit to master
+      - uses: actions/setup-node@v3 #Setup node
+        with:
+          node-version: 16 #Setups node for npm commands below
+      - name: npm install, build and Template
+        run: |
+          npm ci
+          npm run build
+          npm test
 
-  steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 16
 
-    - name: npm install, build and test
-      run: |
-        npm ci
-        npm run build
-        npm test
+
+
+
+
